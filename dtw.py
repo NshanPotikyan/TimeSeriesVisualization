@@ -132,7 +132,7 @@ class DTW:
         if standard_graph:
             self.standard_plot()
         else:
-            self.interactive_plot()
+            return self.interactive_plot()
 
     def standard_plot(self):
         """
@@ -224,9 +224,10 @@ class DTW:
 
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
-        print(fig)
+        #print(fig)
+        return fig.to_json()
         #fig.show()
-        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        #graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        return graphJSON
+        #return graphJSON
         #return fig
