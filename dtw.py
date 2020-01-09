@@ -122,4 +122,5 @@ class DTW:
         plt.xlabel('Index')
         plt.ylabel('Data')
         plt.title(title)
-        plt.show()
+        #plt.show()
+        plt.savefig("output.png")
