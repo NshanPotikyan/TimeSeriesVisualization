@@ -144,6 +144,7 @@ class DTW:
         path = self.get_path()
         n = plot_params['n']
 
+        plt.figure(figsize=(10, 8))
         plt.plot(np.arange(n)[:len(s1)] + x_shift, s1 + y_shift, label=plot_params['s1_name'])
         plt.plot(np.arange(n)[:len(s2)], s2, label=plot_params['s2_name'])
 
@@ -157,6 +158,11 @@ class DTW:
         plt.xlabel(plot_params['x_label'])
         plt.ylabel(plot_params['y_label'])
         plt.title(plot_params['title'])
+        # we don't need to show the y axis values
+        # since one of the series is shifted
+        # for visual purposes
+        plt.yticks(ticks=[])
+
         plt.show()
 
     def interactive_plot(self):
