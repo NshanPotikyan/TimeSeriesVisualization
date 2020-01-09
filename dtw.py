@@ -83,7 +83,7 @@ class DTW:
         """
         return self.cost_matrix[-1, -1]
     
-    def plot(self, standard_graph=True):
+    def plot(self, standard_graph=True, x_shift=None, y_shift=None):
         """
         Plots the two time series and marks their alignment
         obtained with DTW
@@ -104,12 +104,14 @@ class DTW:
             n = n1
             i, j = 0, 1
 
-        #  these 2 variables can be inputs
+
         #  shifting one of the series
         #  (the longest, if the series differ in size)
         #  for visual purposes
-        x_shift = 6
-        y_shift = 2
+        if x_shift is None:
+            x_shift = 6
+        if y_shift is None:
+            y_shift = 2
 
         self.plot_params = {'s1': s1,
                             's2': s2,
@@ -196,7 +198,7 @@ class DTW:
                                                              args=[None,
                                                                    {"frame": {"duration": 100, "redraw": False},
                                                                     "transition": {"duration": 300,
-                                                                                   "easing":"quadratic-in-out"}}]),
+                                                                                   "easing": "quadratic-in-out"}}]),
                                                         dict(label="Stop",
                                                              method="animate",
                                                              args=[[None], {"frame": {"duration": 0, "redraw": False},
