@@ -214,7 +214,8 @@ class DTW:
                 data=[go.Scatter(x=[path[step][i] + x_shift, path[step][j]],
                                  y=[s1[path[step][i]] + y_shift, s2[path[step][j]]],
                                  mode='lines',
-                                 line=dict(color="black"))]) for step in range(len(path))])
+                                 line=dict(color="black", dash='dot'))]) for step in range(len(path))]
+        )
 
         fig.update_layout(title_text=plot_params['title'],
                           xaxis_rangeslider_visible=True)
