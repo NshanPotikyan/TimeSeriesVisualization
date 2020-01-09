@@ -12,13 +12,9 @@ def create_plot():
     y = np.random.randn(N)
     df = pd.DataFrame({'x': x, 'y': y}) # creating a sample dataframe
 
+    df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
 
-    data = [
-        go.Bar(
-            x=df['x'], # assign x as the dataframe column 'x'
-            y=df['y']
-        )
-    ]
+    data=[go.Scatter(x=df.Date,y=df['AAPL.High'],name="AAPL High",line_color='deepskyblue',opacity=0.8)]
 
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
 
