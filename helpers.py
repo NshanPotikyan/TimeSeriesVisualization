@@ -14,7 +14,11 @@ def create_plot():
 
     df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
 
-    data=[go.Scatter(x=df.Date,y=df['AAPL.High'],name="AAPL High",line_color='deepskyblue',opacity=0.8)]
+    data=[
+        go.Scatter(x=df.Date,y=df['AAPL.High'],name="AAPL High",line_color='deepskyblue',opacity=0.8),
+       go.Scatter( x=df.Date,y=df['AAPL.Low'],name="AAPL Low",line_color='dimgray',opacity=0.8)
+
+   ]
 
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
 
