@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly
 import plotly.graph_objects as go
+import json
 
 class DTW:
     
@@ -155,13 +157,6 @@ class DTW:
             plt.plot(x1_x2, y1_y2, c='k', linestyle=':')
 
         plt.legend()
-<<<<<<< HEAD
-        plt.xlabel('Index')
-        plt.ylabel('Data')
-        plt.title(title)
-        #plt.show()
-        plt.savefig("output.png")
-=======
         plt.xlabel(plot_params['x_label'])
         plt.ylabel(plot_params['y_label'])
         plt.title(plot_params['title'])
@@ -229,6 +224,9 @@ class DTW:
 
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
+        print(fig)
+        #fig.show()
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        fig.show()
->>>>>>> e6294597c78ddf7e02a540ce89a790c40e8e5f6e
+        return graphJSON
+        #return fig
