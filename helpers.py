@@ -7,12 +7,22 @@ import json
 def create_plot():
 
 
-    N = 40
-    x = np.linspace(0, 1, N)
-    y = np.random.randn(N)
-    df = pd.DataFrame({'x': x, 'y': y}) # creating a sample dataframe
 
-    df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
+#    df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
+
+train = pd.read_csv('datasets/ECG200/ECG200_TRAIN.tsv', 
+                   header=None,
+                   sep='\t')
+
+test = pd.read_csv('datasets/ECG200/ECG200_TEST.tsv', 
+                   header=None,
+                   sep='\t')
+
+X_train = train.iloc[:, 1:]
+y_train = train.iloc[:, 0]
+X_test = test.iloc[:, 1:]
+y_test = test.iloc[:, 0]
+
 
     data=[
         go.Scatter(x=df.Date,y=df['AAPL.High'],name="AAPL High",line_color='deepskyblue',opacity=0.8),
