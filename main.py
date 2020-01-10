@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, request
+from flask import render_template, request,redirect
 #from helpers import create_plot
 from dtw import DTW
 import pandas as pd
@@ -35,29 +35,36 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            #filename = secure_filename(file.filename)
+            filename='tst.tsv'
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return 'file uploaded successfully'
+            return redirect('/plot')
 
 
 @app.route('/plot')
 def plot():
 #bar=create_plot()
-    train = pd.read_csv('datasets/ECG200/ECG200_TRAIN.tsv', 
+    data = pd.read_csv('uploads/tst.tsv', 
                    header=None,
-                   sep='\t')
+                   sep=',')
 
-    test = pd.read_csv('datasets/ECG200/ECG200_TEST.tsv', 
-                   header=None,
-                   sep='\t')
-    X_train = train.iloc[:, 1:]
-    y_train = train.iloc[:, 0]
-    X_test = test.iloc[:, 1:]
-    y_test = test.iloc[:, 0]
+
+    #train = pd.read_csv('datasets/ECG200/ECG200_TRAIN.tsv', 
+    #               header=None,
+    #               sep='\t')
+
+    #test = pd.read_csv('datasets/ECG200/ECG200_TEST.tsv', 
+    #               header=None,
+    #               sep='\t')
+    #X_train = train.iloc[:, 1:]
+    #y_train = train.iloc[:, 0]
+    #X_test = test.iloc[:, 1:]
+    #y_test = test.iloc[:, 0]
     #return render_template('plot.html',plot=bar)
     #DTW(X_train.iloc[0, :], X_train.iloc[1, :]).plot(y_shift=6.5)
-    fg=DTW(X_train.iloc[0, :], X_train.iloc[2, :]).plot(standard_graph=False)
-    print(fg)
+    X = data.iloc[:, 1:]
+    y = data.iloc[:, 0]
+    fg=DTW(X.iloc[1, :], X.iloc[2, :]).plot(standard_graph=False,y_shift=6.5)
     return render_template('plot.html',plot=fg)
 
 if __name__ == '__main__':
