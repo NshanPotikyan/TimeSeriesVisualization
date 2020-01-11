@@ -12,16 +12,16 @@ class DTW:
 
         if audio_files:
             # s1, s2 are the audio file names .wav, .mp3 etc.
-            s1, _ = librosa.load(s1, sr=100)
-            s2, _ = librosa.load(s2, sr=100)
+
+            s1, s2 = self.load_audio(file_name=s1), self.load_audio(file_name=s2)
 
             # decreasing the dimensionality of the signal
             # by moving average smoothing
             if len(s1) > 1000:
-                s1 = self.moving_average(s1)
+                s1 = self.moving_average(input_series=s1)
 
             if len(s2) > 1000:
-                s2 = self.moving_average(s2)
+                s2 = self.moving_average(input_series=s2)
 
         # converting the series into numpy arrays
         if not isinstance(s1, np.ndarray):
@@ -32,6 +32,16 @@ class DTW:
         self.cost_matrix = self.get_cost_matrix(self.s1,
                                                 self.s2)
         self.plot_params = None
+
+    def load_audio(self, file_name, sr=100):
+
+        try:
+            output_series, _ = librosa.load(file_name, sr=sr)
+        except ZeroDivisionError:
+            sr += 100
+            output_series = self.load_audio(file_name, sr=sr)
+
+        return output_series
 
     @staticmethod
     def get_cost_matrix(s1, s2):
@@ -262,12 +272,11 @@ class DTW:
 
         # fig.show()
 
-    @ staticmethod
-    def moving_average(series, window_size=11, stride=5):
+    def moving_average(self, input_series, window_size=11, stride=5):
         """
         Performs moving average smoothing
         on the given time series
-        :param series: numpy array
+        :param input_series: numpy array
             - time series
         :param window_size: int
             - the sliding window size
@@ -275,12 +284,13 @@ class DTW:
             - step size of the window
         :return:
         """
-        len_y = len(series)
+        # print(input_series)
+        len_y = len(input_series)
         assert len_y >= window_size
         nr_filters = np.floor((len_y - window_size + 1 * stride) / stride)
         denoised = []
         for i in range(int(nr_filters)):
-            denoised.append(series[i*stride:(window_size + i*stride)].mean())
+            denoised.append(input_series[i*stride:(window_size + i*stride)].mean())
         return np.array(denoised)
 
         #return graphJSON
