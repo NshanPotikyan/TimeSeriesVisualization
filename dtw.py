@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly
 import plotly.graph_objects as go
 import librosa
+import json
 
 
 class DTW:
@@ -153,7 +155,7 @@ class DTW:
         if standard_graph:
             self.standard_plot()
         else:
-            self.interactive_plot()
+            return self.interactive_plot()
 
     def standard_plot(self):
         plot_params = self.plot_params
@@ -253,8 +255,12 @@ class DTW:
 
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
+        #print(fig)
+        return fig.to_json()
+        #fig.show()
+        #graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        fig.show()
+        # fig.show()
 
     @ staticmethod
     def moving_average(series, window_size=11, stride=5):
@@ -276,3 +282,40 @@ class DTW:
         for i in range(int(nr_filters)):
             denoised.append(series[i*stride:(window_size + i*stride)].mean())
         return np.array(denoised)
+
+        #return graphJSON
+        #return fig
+
+
+    # def standard_plot(self):
+    #     """
+    #     Plot a standard plot with matplotlib
+    #     :return:
+    #     """
+    #     plot_params = self.plot_params
+    #     s1, s2 = plot_params['s1'], plot_params['s2']
+    #     i, j = plot_params['i'], plot_params['j']
+    #     x_shift, y_shift = plot_params['x_shift'], plot_params['y_shift']
+    #     path = self.get_path()
+    #     n = plot_params['n']
+    #
+    #     plt.figure(figsize=(10, 8))
+    #     plt.plot(np.arange(n)[:len(s1)] + x_shift, s1 + y_shift, label=plot_params['s1_name'])
+    #     plt.plot(np.arange(n)[:len(s2)], s2, label=plot_params['s2_name'])
+    #
+    #     for step in range(len(path)):
+    #         x1_x2 = [path[step][i] + x_shift, path[step][j]]
+    #         y1_y2 = [s1[path[step][i]] + y_shift, s2[x1_x2[j]]]
+    #         # drawing a line from (x1, y1) to (x2, y2)
+    #         plt.plot(x1_x2, y1_y2, c='k', linestyle=':')
+    #
+    #     plt.legend()
+    #     plt.xlabel(plot_params['x_label'])
+    #     plt.ylabel(plot_params['y_label'])
+    #     plt.title(plot_params['title'])
+    #     # we don't need to show the y axis values
+    #     # since one of the series is shifted
+    #     # for visual purposes
+    #     plt.yticks(ticks=[])
+    #
+    #     plt.show()
