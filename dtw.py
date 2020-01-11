@@ -1,10 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import librosa
+
 
 class DTW:
     
-    def __init__(self, s1, s2):
+    def __init__(self, s1, s2, audio_files=False):
+
+        if audio_files:
+            # s1, s2 are the audio file names .wav, .mp3 etc.
+            s1, _ = librosa.load(s1, sr=100)
+            s2, _ = librosa.load(s2, sr=100)
+
+            # decreasing the dimensionality of the signal
+            # by moving average smoothing
+            if len(s1) > 1000:
+                s1 = self.moving_average(s1)
+
+            if len(s2) > 1000:
+                s2 = self.moving_average(s2)
+
         # converting the series into numpy arrays
         if not isinstance(s1, np.ndarray):
             s1, s2 = np.array(s1), np.array(s2)
@@ -88,7 +104,15 @@ class DTW:
         Plots the two time series and marks their alignment
         obtained with DTW
 
-        :param standard_graph: boolean, if False, plots an interactive graph
+        :param standard_graph: boolean
+            - if False, plots an interactive graph
+
+        :param x_shift: numeric (optional)
+            - specifies the shifting margin for the longest
+            series on the x axis
+        :param y_shift: numeric (optional)
+            - specifies the shifting margin for the longest
+            series on the y axis
         :return:
         """
         s1 = self.s1
@@ -104,14 +128,13 @@ class DTW:
             n = n1
             i, j = 0, 1
 
-
         #  shifting one of the series
         #  (the longest, if the series differ in size)
         #  for visual purposes
         if x_shift is None:
             x_shift = 6
         if y_shift is None:
-            y_shift = 2
+            y_shift = max(s1)
 
         self.plot_params = {'s1': s1,
                             's2': s2,
@@ -133,37 +156,45 @@ class DTW:
             self.interactive_plot()
 
     def standard_plot(self):
-        """
-        Used to plot a standard plot
-        :return:
-        """
         plot_params = self.plot_params
         s1, s2 = plot_params['s1'], plot_params['s2']
+        n1, n2 = len(s1), len(s2)
         i, j = plot_params['i'], plot_params['j']
         x_shift, y_shift = plot_params['x_shift'], plot_params['y_shift']
         path = self.get_path()
         n = plot_params['n']
 
-        plt.figure(figsize=(10, 8))
-        plt.plot(np.arange(n)[:len(s1)] + x_shift, s1 + y_shift, label=plot_params['s1_name'])
-        plt.plot(np.arange(n)[:len(s2)], s2, label=plot_params['s2_name'])
+        fig = go.Figure(
+            data=[go.Scatter(x=np.arange(n)[:n1] + x_shift,
+                             y=s1 + y_shift,
+                             name=plot_params['s1_name'],
+                             line=dict(color="red"),
+                             customdata=s1,                 # using the default values (without shifting) for hovering
+                             hovertemplate='<i>Value</i>: %{customdata:.4f}'),
+                  go.Scatter(x=np.arange(n)[:n2],
+                             y=s2,
+                             name=plot_params['s2_name'],
+                             line=dict(color="blue"),
+                             hovertemplate='<i>Value</i>: %{y:.4f}')]
+        )
 
-        for step in range(len(path)):
-            x1_x2 = [path[step][i] + x_shift, path[step][j]]
-            y1_y2 = [s1[path[step][i]] + y_shift, s2[x1_x2[j]]]
-            # drawing a line from (x1, y1) to (x2, y2)
-            plt.plot(x1_x2, y1_y2, c='k', linestyle=':')
+        for k in range(len(path)):
+            fig.add_trace(
+                go.Scatter(x=[path[k][i] + x_shift, path[k][j]],
+                           y=[s1[path[k][i]] + y_shift, s2[path[k][j]]],
+                           mode='lines',
+                           line=dict(color="black", dash='dot'),
+                           showlegend=False, hoverinfo="y",
+                           hovertemplate='<i>Value</i>: %{y:.4f}')
+                            )
 
-        plt.legend()
-        plt.xlabel(plot_params['x_label'])
-        plt.ylabel(plot_params['y_label'])
-        plt.title(plot_params['title'])
-        # we don't need to show the y axis values
-        # since one of the series is shifted
-        # for visual purposes
-        plt.yticks(ticks=[])
+        fig.update_layout(title_text=plot_params['title'],
+                          xaxis_rangeslider_visible=True)
 
-        plt.show()
+        fig.update_xaxes(title_text=plot_params['x_label'])
+        fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
+
+        fig.show()
 
     def interactive_plot(self):
         """
@@ -190,12 +221,12 @@ class DTW:
                              name=plot_params['s1_name'],
                              line=dict(color="red"),
                              customdata=s1,                 # using the default values (without shifting) for hovering
-                             hovertemplate='<i>Value</i>: %{customdata:.2f}'),
+                             hovertemplate='<i>Value</i>: %{customdata:.4f}'),
                   go.Scatter(x=np.arange(n)[:n2],
                              y=s2,
                              name=plot_params['s2_name'],
                              line=dict(color="blue"),
-                             hovertemplate='<i>Value</i>: %{y:.2f}')],
+                             hovertemplate='<i>Value</i>: %{y:.4f}')],
             layout=go.Layout(xaxis=dict(range=[0, n + x_shift], autorange=False, zeroline=False),
                              yaxis=dict(range=[min(s2), max(s1)+y_shift], autorange=False, zeroline=False),
                              updatemenus=[dict(type="buttons",
@@ -224,3 +255,24 @@ class DTW:
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
 
         fig.show()
+
+    @ staticmethod
+    def moving_average(series, window_size=11, stride=5):
+        """
+        Performs moving average smoothing
+        on the given time series
+        :param series: numpy array
+            - time series
+        :param window_size: int
+            - the sliding window size
+        :param stride: int
+            - step size of the window
+        :return:
+        """
+        len_y = len(series)
+        assert len_y >= window_size
+        nr_filters = np.floor((len_y - window_size + 1 * stride) / stride)
+        denoised = []
+        for i in range(int(nr_filters)):
+            denoised.append(series[i*stride:(window_size + i*stride)].mean())
+        return np.array(denoised)
