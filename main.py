@@ -26,25 +26,29 @@ def upload_file():
     if request.method == 'POST':
         input_type = request.form['type']
         # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
+        if 'file1' not in request.files or 'file2' not in request.files:
+            return "No files Selected"
+        file1 = request.files['file1']
+        file2 = request.files['file2']
         # if user does not select file, browser also
         # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
+        if file1.filename == '' or file2.filename == '':
+            return "No files Selected"
+        if file1 and allowed_file(file1.filename) and file2 and allowed_file(file2.filename):
             #filename = secure_filename(file.filename)
-            filename='tst.tsv'
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect('/plot_audio')
+            filename1='file1'
+            filename2='file2'
+            file1.save(os.path.join(app.config['UPLOAD_FOLDER'], filename1))
+            file2.save(os.path.join(app.config['UPLOAD_FOLDER'], filename2))
+            if input_type=='series':
+                return redirect('/plot_series')
+            if input_type=='audio':
+                return redirect('/plot_audio')
 
 
-@app.route('/plot_series')
-def plot_series():
 
+@app.route('/plot_audio')
+def plot_audio():
     data = pd.read_csv('uploads/tst.tsv', 
                    header=None,
                    sep=',')
@@ -54,16 +58,24 @@ def plot_series():
     fg=DTW(X.iloc[1, :], X.iloc[2, :]).plot(standard_graph=False,y_shift=6.5)
     return render_template('plot.html',plot=fg)
 
-@app.route('/plot_audio')
-def plot_audio():
-
-    data = pd.read_csv('uploads/tst.tsv', 
+@app.route('/plot_series')
+def plot_series():
+    file1 = pd.read_csv('uploads/file1', 
                    header=None,
                    sep=',')
 
-    X = data.iloc[:, 1:]
-    y = data.iloc[:, 0]
-    fg=DTW(X.iloc[1, :], X.iloc[2, :]).plot(standard_graph=False,y_shift=6.5)
+    X1 = file1.iloc[:, 1:]
+    y1 = file1.iloc[:, 0]
+
+    file2 = pd.read_csv('uploads/file2', 
+                   header=None,
+                   sep=',')
+
+    X2 = file2.iloc[:, 1:]
+    y2 = file2.iloc[:, 0]
+
+
+    fg=DTW(X1.iloc[1, :], X2.iloc[1, :]).plot(standard_graph=False,y_shift=6.5)
     return render_template('plot.html',plot=fg)
 
 
