@@ -77,7 +77,7 @@ def plot_series():
     y2 = file2.iloc[:, 0]
 
 
-    fg=DTW(X1.iloc[1, :], X2.iloc[1, :]).plot(standard_graph=False,y_shift=6.5)
+    fg=DTW(X1.iloc[1, :], X2.iloc[1, :]).plot(standard_graph=False)
     return render_template('plot.html',plot=fg)
 
 @app.route('/plot_test')
