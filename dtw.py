@@ -147,6 +147,8 @@ class DTW:
             x_shift = 6
         if y_shift is None:
             y_shift = max(s1)
+            
+        title = 'Time Series Alignment with DTW | distance={:.2f}'.format(self.get_distance())
 
         self.plot_params = {'s1': s1,
                             's2': s2,
@@ -155,7 +157,7 @@ class DTW:
                             'j': j,
                             'x_shift': x_shift,
                             'y_shift': y_shift,
-                            'title': 'Time Series Alignment with DTW',
+                            'title': title,
                             's1_name': 'Series 1',
                             's2_name': 'Series 2',
                             'x_label': 'Time Index',
