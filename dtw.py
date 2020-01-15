@@ -165,7 +165,7 @@ class DTW:
                             }
 
         if standard_graph:
-            self.standard_plot()
+            return self.standard_plot()
         else:
             return self.interactive_plot()
 
@@ -208,7 +208,8 @@ class DTW:
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
 
-        fig.show()
+        return fig.to_json()
+        #fig.show()
 
     def interactive_plot(self):
         """

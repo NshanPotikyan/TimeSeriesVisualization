@@ -91,13 +91,34 @@ def plot_series():
 
 @app.route('/plot_audio_static')
 def plot_audio_static():
+    fg=DTW('uploads/file1','uploads/file2',audio_files=True).plot(standard_graph=True)
+    return render_template('plot.html',plot=fg)
     return render_template('static.html')
 
 
 
 @app.route('/plot_series_static')
 def plot_series_static():
-    return "static series"
+    file1 = pd.read_csv('uploads/file1', 
+                   header=None,
+                   sep=',')
+
+    X1 = file1.iloc[:, 1:]
+    y1 = file1.iloc[:, 0]
+
+    file2 = pd.read_csv('uploads/file2', 
+                   header=None,
+                   sep=',')
+
+    X2 = file2.iloc[:, 1:]
+    y2 = file2.iloc[:, 0]
+
+
+    fg=DTW(X1.iloc[1, :], X2.iloc[1, :]).plot(standard_graph=True)
+    return render_template('plot.html',plot=fg)
+
+
+
 
 @app.route('/plot_test')
 def plot_test():
