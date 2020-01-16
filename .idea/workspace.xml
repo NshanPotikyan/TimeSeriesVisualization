@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61310e17-866d-47ce-aaf9-0ce325326982" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/plot.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/static.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TSC_with_DTW.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/TSC_with_DTW.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dtw.py" beforeDir="false" afterPath="$PROJECT_DIR$/dtw.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/file1" beforeDir="false" afterPath="$PROJECT_DIR$/uploads/file1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/file2" beforeDir="false" afterPath="$PROJECT_DIR$/uploads/file2" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
