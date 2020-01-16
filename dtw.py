@@ -125,6 +125,8 @@ class DTW:
         :param y_shift: numeric (optional)
             - specifies the shifting margin for the longest
             series on the y axis
+        :param return_plot: boolean (optional)
+            - specifies whether to return a graph or json
         :return:
         """
         s1 = self.s1
@@ -166,7 +168,7 @@ class DTW:
                             }
 
         if standard_graph:
-            self.standard_plot()
+            return self.standard_plot()
         else:
             return self.interactive_plot()
 
@@ -209,7 +211,10 @@ class DTW:
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
 
-        fig.show()
+        if plot_params['return_plot']:
+            fig.show()
+        else:
+            return fig.to_json()
 
     def interactive_plot(self):
         """
@@ -269,7 +274,10 @@ class DTW:
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
         #print(fig)
-        return fig.to_json()
+        if plot_params['return_plot']:
+            fig.show()
+        else:
+            return fig.to_json()
         #fig.show()
         #graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 

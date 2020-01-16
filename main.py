@@ -26,6 +26,7 @@ def index():
 def upload_file():
     if request.method == 'POST':
         input_type = request.form['type']
+        plot_t = request.form['plot_t']
         # check if the post request has the file part
         if 'file1' not in request.files or 'file2' not in request.files:
             return "No files Selected"
@@ -41,10 +42,17 @@ def upload_file():
             filename2='file2'
             file1.save(os.path.join(app.config['UPLOAD_FOLDER'], filename1))
             file2.save(os.path.join(app.config['UPLOAD_FOLDER'], filename2))
-            if input_type=='series':
-                return redirect('/plot_series')
-            if input_type=='audio':
-                return redirect('/plot_audio')
+            if plot_t=='interactive':
+                if input_type=='series':
+                    return redirect('/plot_series')
+                if input_type=='audio':
+                    return redirect('/plot_audio')
+            if plot_t=='static':
+                if input_type=='series':
+                    return redirect('/plot_series_static')
+                if input_type=='audio':
+                    return redirect('/plot_audio_static')
+
 
 
 
@@ -79,6 +87,38 @@ def plot_series():
 
     fg=DTW(X1.iloc[1, :], X2.iloc[1, :]).plot(standard_graph=False)
     return render_template('plot.html',plot=fg)
+
+
+@app.route('/plot_audio_static')
+def plot_audio_static():
+    fg=DTW('uploads/file1','uploads/file2',audio_files=True).plot(standard_graph=True)
+    return render_template('plot.html',plot=fg)
+    return render_template('static.html')
+
+
+
+@app.route('/plot_series_static')
+def plot_series_static():
+    file1 = pd.read_csv('uploads/file1', 
+                   header=None,
+                   sep=',')
+
+    X1 = file1.iloc[:, 1:]
+    y1 = file1.iloc[:, 0]
+
+    file2 = pd.read_csv('uploads/file2', 
+                   header=None,
+                   sep=',')
+
+    X2 = file2.iloc[:, 1:]
+    y2 = file2.iloc[:, 0]
+
+
+    fg=DTW(X1.iloc[1, :], X2.iloc[1, :]).plot(standard_graph=True)
+    return render_template('plot.html',plot=fg)
+
+
+
 
 @app.route('/plot_test')
 def plot_test():
