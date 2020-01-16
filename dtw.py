@@ -111,7 +111,7 @@ class DTW:
         """
         return self.cost_matrix[-1, -1]
     
-    def plot(self, standard_graph=True, x_shift=None, y_shift=None):
+    def plot(self, standard_graph=True, x_shift=None, y_shift=None, return_plot=False):
         """
         Plots the two time series and marks their alignment
         obtained with DTW
@@ -161,7 +161,8 @@ class DTW:
                             's1_name': 'Series 1',
                             's2_name': 'Series 2',
                             'x_label': 'Time Index',
-                            'y_label': 'Data'
+                            'y_label': 'Data',
+                            'return_plot': return_plot
                             }
 
         if standard_graph:
