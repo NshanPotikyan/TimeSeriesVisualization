@@ -588,11 +588,11 @@ DTW(X_train.iloc[0, :], X_train.iloc[2, :]).plot(return_plot=True)
 
     The series have different labels
     
-![png](plot1.png)
+![png](images/plot1.png)
 
     The series have the same labels
     
-![png](plot2.png)
+![png](images/plot2.png)
 
 
 ### Interactive plot
@@ -608,7 +608,7 @@ Press **Play** to see the animation
 DTW(X_train.iloc[0, :], X_train.iloc[2, :]).plot(standard_graph=False, return_plot=True)
 ```
 
-![png](plot3.png)
+![png](images/plot3.png)
 
 ### DTW from audio (from freesound.org)
 
@@ -621,7 +621,7 @@ DTW(audio1, audio2, audio_files=True).plot(standard_graph=False,
                                            return_plot=True) 
 ```
 
-![png](plot4.png)
+![png](images/plot4.png)
 
 ### Time Series Classification with DTW 
 
