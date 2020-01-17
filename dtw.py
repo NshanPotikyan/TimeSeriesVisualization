@@ -1,9 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import plotly
+# import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import librosa
-import json
+
 
 
 class DTW:
@@ -273,15 +272,11 @@ class DTW:
 
         fig.update_xaxes(title_text=plot_params['x_label'])
         fig.update_yaxes(title_text=plot_params['y_label'], showticklabels=False)
-        #print(fig)
+
         if plot_params['return_plot']:
             fig.show()
         else:
             return fig.to_json()
-        #fig.show()
-        #graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-        # fig.show()
 
     def moving_average(self, input_series, window_size=11, stride=5):
         """
@@ -303,10 +298,6 @@ class DTW:
         for i in range(int(nr_filters)):
             denoised.append(input_series[i*stride:(window_size + i*stride)].mean())
         return np.array(denoised)
-
-        #return graphJSON
-        #return fig
-
 
     # def standard_plot(self):
     #     """
