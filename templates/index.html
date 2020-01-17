@@ -1,15 +1,19 @@
 <html>
    <body>
+       <title>DTW Visualization</title>
+       <h1><center>Time Series Visualization using Dynamic Time Warping</center></h1>
       <form action = "" method = "POST" 
          enctype = "multipart/form-data">
+          <h3>Select Files For Visualization</h3>
 	  <p><input type = "file" name = "file1" /></p>
 	  <p><input type = "file" name = "file2" /></p>
+          <h3>Select Input Type</h3>
 	 <input type="radio" name="type" value="series" checked> Series<br>
 	 <input type="radio" name="type" value="audio"> Audio<br>
-         <p>Select Plot Type</p>
+         <h3>Select Plot Type</h3>
 	 <input type="radio" name="plot_t" value="interactive" checked> Interactive<br>
 	 <input type="radio" name="plot_t" value="static"> Static<br>
-         <input type = "submit"/>
+         <p><input type = "submit" value="Next" /></p>
       </form>
    </body>
 </html>
